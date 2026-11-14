@@ -230,8 +230,13 @@ pub(crate) fn transport<F>(cell: &Cell<F>, resting: AnyElement, hover: Transport
                         .flex()
                         .items_center()
                         .justify_center()
-                        .invisible()
-                        .group_hover(ROW_GROUP, |style| style.visible())
+                        .when_else(
+                            // Without a pointer there is no hover to reveal it with, so on a
+                            // touchscreen the transport button is simply always there.
+                            cfg!(target_os = "android"),
+                            |this| this,
+                            |this| this.invisible().group_hover(ROW_GROUP, |style| style.visible()),
+                        )
                         .child(Glyph { icon, color })
                         .when_else(
                             enabled,
