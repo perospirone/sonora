@@ -17,3 +17,6 @@
 # GameActivity's native_app_glue calls back into the activity at well-known
 # signatures; preserve the whole class.
 -keep class com.google.androidgamesdk.** { *; }
+
+# rustls-platform-verifier reaches its Java half only through JNI, which R8 cannot see.
+-keep, includedescriptorclasses class org.rustls.platformverifier.** { *; }

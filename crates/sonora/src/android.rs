@@ -58,6 +58,7 @@ fn start(app: AndroidApp) -> anyhow::Result<()> {
         }
     }
 
+    trust_android_certificates(&app)?;
     gpui_android::set_android_app(app);
     memory::tune();
 
@@ -76,5 +77,24 @@ fn start(app: AndroidApp) -> anyhow::Result<()> {
         cx.activate(true);
     });
 
+    Ok(())
+}
+
+/// Hands `rustls-platform-verifier` the JVM and the activity, so certificate checks go through
+/// Android's own trust store.
+///
+/// reqwest validates TLS through this crate on every platform, and on Android it panics on the
+/// first handshake until it has been initialized, which takes down the thread that asked.
+fn trust_android_certificates(app: &AndroidApp) -> anyhow::Result<()> {
+    use jni::objects::JObject;
+
+    // SAFETY: `android-activity` keeps the VM and the activity alive for the whole process, and
+    // this runs on its own main thread before the runtime has spawned any worker.
+    let vm = unsafe { jni::JavaVM::from_raw(app.vm_as_ptr().cast()) };
+    vm.attach_current_thread(|env| {
+        let context = unsafe { JObject::from_raw(env, app.activity_as_ptr().cast()) };
+        rustls_platform_verifier::android::init_with_env(env, context)
+    })
+    .context("cannot initialize Android certificate verification")?;
     Ok(())
 }

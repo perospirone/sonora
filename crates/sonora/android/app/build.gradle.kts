@@ -12,6 +12,47 @@ plugins {
     id("com.android.application")
 }
 
+/// Reads the `rustls-platform-verifier-android` version out of the workspace lockfile, so the
+/// Kotlin verifier this APK packages always matches the Rust crate.
+abstract class RustlsVersion : ValueSource<String, RustlsVersion.Params> {
+    interface Params : ValueSourceParameters {
+        val lockFile: RegularFileProperty
+    }
+
+    companion object {
+        const val CRATE_NAME = "rustls-platform-verifier-android"
+    }
+
+    override fun obtain(): String {
+        val version = parameters.lockFile.get().asFile.readLines().let { lines ->
+            val nameIdx = lines.indexOfFirst { it.trim() == "name = \"$CRATE_NAME\"" }
+            if (nameIdx < 0) {
+                null
+            } else {
+                lines.drop(nameIdx + 1)
+                    .firstOrNull { it.trimStart().startsWith("version = ") }
+                    ?.substringAfter('"', "")
+                    ?.substringBefore('"', "")
+                    ?.takeIf { it.isNotEmpty() }
+            }
+        }
+        return version ?: error("$CRATE_NAME not found in Cargo.lock")
+    }
+}
+
+val rustlsPlatformVerifierVersion = providers.of(RustlsVersion::class.java) {
+    parameters.lockFile.set(layout.projectDirectory.file("../../../../Cargo.lock"))
+}
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.rustls" && requested.name == "rustls-platform-verifier") {
+            useVersion(rustlsPlatformVerifierVersion.get())
+            because("the packaged verifier must match the Rust crate's version")
+        }
+    }
+}
+
 android {
     namespace = "dev.sonora.android"
     // We compile against the highest SDK installed locally (34) — Play
@@ -59,6 +100,9 @@ android {
 }
 
 dependencies {
+    // The Kotlin half of `rustls-platform-verifier`: it validates TLS against Android's own
+    // trust store, which is the only way certificate checks work on this platform.
+    implementation("org.rustls:rustls-platform-verifier")
     // GameActivity ships in the games-activity AAR. android-activity expects
     // this to be on the classpath when the `game-activity` feature is on.
     implementation("androidx.games:games-activity:3.0.5")
