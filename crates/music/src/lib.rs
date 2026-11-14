@@ -27,6 +27,7 @@ pub mod potoken;
 pub mod progress;
 mod redact;
 pub mod scrobble;
+pub mod shell;
 mod sink;
 pub mod soloist;
 mod spectrum;
@@ -37,6 +38,9 @@ pub mod tidal;
 mod trim;
 pub mod trouble;
 pub mod vault;
+/// The YouTube Music provider runs its client in QuickJS, which ships no bindings for Android,
+/// so the provider is absent on that platform.
+#[cfg(not(target_os = "android"))]
 pub mod youtube;
 
 use std::collections::{HashMap, HashSet};
