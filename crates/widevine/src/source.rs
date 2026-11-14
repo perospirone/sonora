@@ -65,6 +65,10 @@ pub struct Found {
 }
 
 /// A place to look, in the one form each browser family answers to.
+#[cfg_attr(
+    not(feature = "cdm"),
+    allow(dead_code, reason = "only the CDM host walks these folders")
+)]
 enum Place {
     /// A module at exactly this path, if it is there at all. Windows never builds one, since
     /// only the pointer file knows a browser's versioned folder there.
