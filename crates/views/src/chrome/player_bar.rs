@@ -593,7 +593,9 @@ impl Render for PlayerBar {
         let clock_text = theme.text(ui::Text::Tiny);
         // Equal wings keep the title centered while reserving the original volume slider width.
         let centered_wing = theme.metrics.control * 4. + px(VOLUME_WIDTH) + theme.metrics.pad * 3.;
-        let show_track = span.fits(Room::Snug);
+        // The stacked bar gives the track a row of its own, so it shows the name even where the
+        // classic bar would have had no room for it.
+        let show_track = stacked || span.fits(Room::Snug);
         let sides = match SidebarRight::available(window) {
             true => Some(self.side_buttons(cx)),
             false => None,
