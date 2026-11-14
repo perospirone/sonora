@@ -46,10 +46,7 @@ fn start_view(
     url: &str,
 ) -> anyhow::Result<()> {
     use anyhow::Context as _;
-    use jni::{
-        jni_sig, jni_str,
-        objects::JValue,
-    };
+    use jni::{jni_sig, jni_str, objects::JValue};
 
     let url = env.new_string(url).context("alloc the URL")?;
     let uri_class = env
