@@ -51,9 +51,9 @@ fastrand = "2.5"
 futures = "0.3"
 gethostname = "1.1"
 fluent-bundle = "0.16"
-gpui = { git = "https://github.com/perospirone/gpui", rev = "7c60c8fe9ed1b74a57e533f0b511a6a99f4320c1" }
-gpui_android = { git = "https://github.com/perospirone/gpui", rev = "7c60c8fe9ed1b74a57e533f0b511a6a99f4320c1" }
-gpui_platform = { git = "https://github.com/perospirone/gpui", rev = "7c60c8fe9ed1b74a57e533f0b511a6a99f4320c1", features = [
+gpui = { git = "https://github.com/perospirone/gpui", rev = "eaa777d7cdf7efb54bd86ef64853ebb0e665aff5" }
+gpui_android = { git = "https://github.com/perospirone/gpui", rev = "eaa777d7cdf7efb54bd86ef64853ebb0e665aff5" }
+gpui_platform = { git = "https://github.com/perospirone/gpui", rev = "eaa777d7cdf7efb54bd86ef64853ebb0e665aff5", features = [
     "android",
     "font-kit",
     "wayland",
