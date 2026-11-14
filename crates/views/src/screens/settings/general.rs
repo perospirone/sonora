@@ -1,5 +1,3 @@
-use gpui::prelude::*;
-use gpui::{AnyElement, App, Context, SharedString};
 #[cfg(any(
     target_os = "windows",
     target_os = "linux",
@@ -7,8 +5,11 @@ use gpui::{AnyElement, App, Context, SharedString};
     target_os = "macos"
 ))]
 use gpui::Window;
+use gpui::prelude::*;
+use gpui::{AnyElement, App, Context, SharedString};
 use i18n::{Language, t};
 use router::{NavEntry, Screen};
+use ui::{MenuItem, Pace, Picker, Saver, Stillness, Switch};
 #[cfg(any(
     target_os = "windows",
     target_os = "linux",
@@ -16,7 +17,6 @@ use router::{NavEntry, Screen};
     target_os = "macos"
 ))]
 use ui::{OptionCard, Rounding};
-use ui::{MenuItem, Pace, Picker, Saver, Stillness, Switch};
 
 #[cfg(any(
     target_os = "windows",
@@ -25,6 +25,7 @@ use ui::{MenuItem, Pace, Picker, Saver, Stillness, Switch};
     target_os = "macos"
 ))]
 use super::appearance::corner;
+use super::rows::segmented;
 #[cfg(any(
     target_os = "windows",
     target_os = "linux",
@@ -32,7 +33,6 @@ use super::appearance::corner;
     target_os = "macos"
 ))]
 use super::rows::{Announced as _, grid};
-use super::rows::segmented;
 use super::{Group, LANGUAGES, SettingsView, Slot};
 use crate::shared::popups::matches_query;
 

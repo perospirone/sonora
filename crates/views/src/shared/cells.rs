@@ -235,7 +235,10 @@ pub(crate) fn transport<F>(cell: &Cell<F>, resting: AnyElement, hover: Transport
                             // touchscreen the transport button is simply always there.
                             cfg!(target_os = "android"),
                             |this| this,
-                            |this| this.invisible().group_hover(ROW_GROUP, |style| style.visible()),
+                            |this| {
+                                this.invisible()
+                                    .group_hover(ROW_GROUP, |style| style.visible())
+                            },
                         )
                         .child(Glyph { icon, color })
                         .when_else(

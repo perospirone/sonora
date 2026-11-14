@@ -968,7 +968,10 @@ impl SettingsView {
     /// Builds the slot's row or cards when its group is visible or needs measuring.
     #[cfg_attr(
         target_os = "android",
-        allow(unused_variables, reason = "only the window-frame rows read the window, and Android has none")
+        allow(
+            unused_variables,
+            reason = "only the window-frame rows read the window, and Android has none"
+        )
     )]
     fn slot_element(&self, slot: Slot, window: &Window, cx: &mut Context<Self>) -> AnyElement {
         match slot {

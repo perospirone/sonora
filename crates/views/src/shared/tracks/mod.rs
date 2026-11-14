@@ -466,13 +466,21 @@ impl TrackSource {
         color: Option<Hsla>,
         cx: &App,
     ) -> AnyElement {
-        let playing = self.now_playing(cell.row, cx);
+        // A touchscreen has no pointer hovering over the transport button, so there the title
+        // itself has to play the track. Desktop keeps the title inert.
+        #[cfg(target_os = "android")]
+        let press = {
+            let playing = self.now_playing(cell.row, cx);
+            self.press(cell, playing, track, cx)
+        };
+        #[cfg(not(target_os = "android"))]
+        let press: Option<cells::Tap> = None;
         cells::title(
             cell,
             track.name.clone(),
             color,
             track.explicit.then(|| t!("song-explicit")),
-            self.press(cell, playing, track, cx),
+            press,
             download_mark(cell, track, cx),
             self.liked_button(cell, track, cx),
         )

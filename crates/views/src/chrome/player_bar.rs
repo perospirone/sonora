@@ -593,9 +593,9 @@ impl Render for PlayerBar {
         let clock_text = theme.text(ui::Text::Tiny);
         // Equal wings keep the title centered while reserving the original volume slider width.
         let centered_wing = theme.metrics.control * 4. + px(VOLUME_WIDTH) + theme.metrics.pad * 3.;
-        // The stacked bar gives the track a row of its own, so it shows the name even where the
-        // classic bar would have had no room for it.
-        let show_track = stacked || span.fits(Room::Snug);
+        // A phone always lands in the stacked bar, which gives the track a row of its own, so
+        // there the name shows even below the width the classic bar needs for it.
+        let show_track = span.fits(Room::Snug) || (cfg!(target_os = "android") && stacked);
         let sides = match SidebarRight::available(window) {
             true => Some(self.side_buttons(cx)),
             false => None,
