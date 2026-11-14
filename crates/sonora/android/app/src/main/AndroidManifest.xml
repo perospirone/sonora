@@ -14,7 +14,7 @@
         android:enableOnBackInvokedCallback="true"
         android:theme="@style/Theme.Sonora"
         android:icon="@android:drawable/sym_def_app_icon">
-        <meta-data android:name="android.app.lib_name" android:value="sonora" />
+        <meta-data android:name="android.app.lib_name" android:value="sonora_android" />
 
         <activity
             android:name=".MainActivity"

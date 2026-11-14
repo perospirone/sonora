@@ -1,0 +1,21 @@
+[package]
+name = "sonora-android"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+# Android has no system sqlite, so the APK is built with this on.
+bundled-sqlite = ["sonora/bundled-sqlite"]
+
+[lib]
+name = "sonora_android"
+# A shared library, because that is what the APK loads. Nothing else builds this crate: it is
+# empty on every other target, and `sonora` itself stays a plain library.
+crate-type = ["cdylib"]
+
+[target.'cfg(target_os = "android")'.dependencies]
+sonora.workspace = true
+
+[lints]
+workspace = true

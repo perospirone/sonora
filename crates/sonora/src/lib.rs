@@ -1,6 +1,6 @@
-#[cfg(target_os = "android")]
-mod android;
 mod actions;
+#[cfg(target_os = "android")]
+pub mod android;
 #[cfg(windows)]
 mod app_icon;
 mod assets;
@@ -286,15 +286,16 @@ fn boot(cx: &mut App, io: state::Io, database: storage::Database) {
     ui::Theme::init(look, &overrides, cx);
 }
 
-/// The providers this build ships, the local files provider, and the lyrics sources that go
-/// with them. Every platform runs the same list; nothing here needs a desktop.
-fn providers(
-    database: &storage::Database,
-) -> (
+/// The music providers this build ships, the local files provider beside them, and the lyrics
+/// sources that go with both.
+type Catalogue = (
     Vec<Arc<dyn music::MusicProvider>>,
     Arc<dyn music::MusicProvider>,
     Vec<Arc<dyn LyricsProvider>>,
-) {
+);
+
+/// The providers every platform runs. Nothing here needs a desktop.
+fn providers(database: &storage::Database) -> Catalogue {
     let providers: Vec<Arc<dyn music::MusicProvider>> = vec![
         Arc::new(music::spotify::SpotifyProvider::from_env()),
         Arc::new(music::apple::AppleProvider::new()),
@@ -303,14 +304,13 @@ fn providers(
         Arc::new(music::deezer::DeezerProvider::new()),
         Arc::new(music::tidal::TidalProvider::new()),
     ];
-    let local_provider: Arc<dyn music::MusicProvider> =
-        Arc::new(music::local::LocalProvider::new(
-            dirs::cache_dir()
-                .unwrap_or_else(std::env::temp_dir)
-                .join("sonora"),
-            database.clone(),
-            storage::Cache::standard(),
-        ));
+    let local_provider: Arc<dyn music::MusicProvider> = Arc::new(music::local::LocalProvider::new(
+        dirs::cache_dir()
+            .unwrap_or_else(std::env::temp_dir)
+            .join("sonora"),
+        database.clone(),
+        storage::Cache::standard(),
+    ));
     let lyrics: Vec<Arc<dyn LyricsProvider>> = vec![
         Arc::new(music::local::LocalLyrics),
         Arc::new(music::subsonic::SubsonicLyrics::new()),

@@ -31,7 +31,10 @@ const COVER: u32 = 32;
 
 #[cfg_attr(
     target_os = "android",
-    allow(dead_code, reason = "no tray exists on Android, so nothing sends an event")
+    allow(
+        dead_code,
+        reason = "no tray exists on Android, so nothing sends an event"
+    )
 )]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Event {

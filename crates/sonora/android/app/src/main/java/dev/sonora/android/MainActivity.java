@@ -16,7 +16,7 @@ import dev.zed.gpui.NativeBridge;
 
 public class MainActivity extends GameActivity {
     static {
-        System.loadLibrary("sonora");
+        System.loadLibrary("sonora_android");
     }
 
     @Override

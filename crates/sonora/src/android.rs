@@ -10,13 +10,16 @@ use std::sync::Arc;
 
 use anyhow::Context as _;
 use gpui::App;
-use gpui_android::AndroidApp;
 
-use crate::{actions, assets, boot, http, memory, open_window};
+pub use gpui_android::AndroidApp;
 
-#[unsafe(no_mangle)]
-fn android_main(app: AndroidApp) {
-    if let Err(error) = start(app) {
+use crate::{actions, assets, http, memory, open_window};
+
+/// Boots Sonora in the activity `android-activity` started. The cdylib in
+/// `crates/sonora-android` exports this as `android_main`, the symbol the GameActivity glue
+/// looks for.
+pub fn start(app: AndroidApp) {
+    if let Err(error) = launch(app) {
         log::error!("sonora: android startup failed: {error:#}");
     }
 }
@@ -26,13 +29,13 @@ fn android_main(app: AndroidApp) {
 /// The environment comes first: `dirs` reads `XDG_DATA_HOME`, `XDG_CONFIG_HOME` and
 /// `XDG_CACHE_HOME` on unix, and a freshly started Android process has none of them, so without
 /// this every path in the app resolves to `/`.
-fn start(app: AndroidApp) -> anyhow::Result<()> {
+fn launch(app: AndroidApp) -> anyhow::Result<()> {
     android_logger::init_once(
         android_logger::Config::default().with_max_level(log::LevelFilter::Info),
     );
 
-    let files = gpui_android::paths::files_dir(&app)
-        .context("cannot find the app's files directory")?;
+    let files =
+        gpui_android::paths::files_dir(&app).context("cannot find the app's files directory")?;
     let cache =
         gpui_android::paths::cache_dir(&app).context("cannot find the app's cache directory")?;
     std::fs::create_dir_all(&files).ok();
@@ -68,7 +71,7 @@ fn start(app: AndroidApp) -> anyhow::Result<()> {
         .with_http_client(Arc::new(http::Client::new(io.handle())));
 
     app.run(move |cx: &mut App| {
-        boot(cx, io, storage::Database::standard());
+        crate::boot(cx, io, storage::Database::standard());
         actions::register(false, cx);
         memory::watch(cx);
         open_window(cx);

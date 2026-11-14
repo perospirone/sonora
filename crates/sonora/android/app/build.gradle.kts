@@ -94,7 +94,7 @@ android {
         // debug info).
         jniLibs {
             useLegacyPackaging = false
-            keepDebugSymbols += listOf("**/libsonora.so")
+            keepDebugSymbols += listOf("**/libsonora_android.so")
         }
     }
 }

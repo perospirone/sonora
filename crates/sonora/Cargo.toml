@@ -15,7 +15,6 @@ widevine = ["music/widevine"]
 
 [lib]
 name = "sonora"
-crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 anyhow.workspace = true

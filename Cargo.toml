@@ -19,6 +19,7 @@ state = { path = "crates/state" }
 storage = { path = "crates/storage" }
 input = { path = "crates/input" }
 router = { path = "crates/router" }
+sonora = { path = "crates/sonora", default-features = false }
 ui = { path = "crates/ui" }
 views = { path = "crates/views" }
 webview = { path = "crates/webview" }
