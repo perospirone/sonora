@@ -1,5 +1,7 @@
 #[cfg(any(target_os = "macos", windows))]
 mod native;
+#[cfg(target_os = "android")]
+mod none;
 #[cfg(target_os = "linux")]
 mod sni;
 
@@ -16,6 +18,8 @@ use tokio::sync::mpsc::{self, UnboundedReceiver};
 
 #[cfg(any(target_os = "macos", windows))]
 use native::Icon;
+#[cfg(target_os = "android")]
+use none::Icon;
 #[cfg(target_os = "linux")]
 use sni::Icon;
 
@@ -25,6 +29,10 @@ const CAPTION_LIMIT: usize = 26;
 /// measures, Windows and the status notifier hosts draw it at its own size.
 const COVER: u32 = 32;
 
+#[cfg_attr(
+    target_os = "android",
+    allow(dead_code, reason = "no tray exists on Android, so nothing sends an event")
+)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Event {
     Show,

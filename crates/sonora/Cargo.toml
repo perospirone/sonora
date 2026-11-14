@@ -8,6 +8,14 @@ license.workspace = true
 # the gpui frame overlay and repaint wash, off in normal builds
 profiler = ["gpui/profiler"]
 bundled-sqlite = ["state/bundled-sqlite"]
+# The Widevine CDM host, which only desktop builds can run. Android reaches protected playback
+# through the system's MediaDrm instead, so it builds with `--no-default-features`.
+default = ["widevine"]
+widevine = ["music/widevine"]
+
+[lib]
+name = "sonora"
+crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 anyhow.workspace = true
@@ -20,7 +28,7 @@ gpui.workspace = true
 gpui_platform.workspace = true
 i18n.workspace = true
 icons.workspace = true
-music = { workspace = true, features = ["widevine"] }
+music.workspace = true
 state.workspace = true
 storage.workspace = true
 input.workspace = true
@@ -41,6 +49,10 @@ ksni.workspace = true
 raw-window-handle.workspace = true
 x11rb.workspace = true
 zbus.workspace = true
+
+[target.'cfg(target_os = "android")'.dependencies]
+gpui_android.workspace = true
+android_logger = "0.14"
 
 [target.'cfg(any(target_os = "macos", windows))'.dependencies]
 tray-icon.workspace = true
