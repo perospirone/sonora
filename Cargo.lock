@@ -178,6 +178,49 @@ dependencies = [
 ]
 
 [[package]]
+name = "android-activity"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f2a1bb052857d5dd49572219344a7332b31b76405648eabac5bc68978251bcd"
+dependencies = [
+ "android-properties",
+ "bitflags 2.13.2",
+ "cc",
+ "jni",
+ "libc",
+ "log",
+ "ndk",
+ "ndk-context",
+ "ndk-sys",
+ "num_enum",
+ "simd_cesu8",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "android-properties"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fc7eb209b1518d6bb87b283c20095f5228ecda460da70b44f0802523dea6da04"
+
+[[package]]
+name = "android_log-sys"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "84521a3cf562bc62942e294181d9eef17eb38ceb8c68677bc49f144e4c3d4f8d"
+
+[[package]]
+name = "android_logger"
+version = "0.14.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "05b07e8e73d720a1f2e4b6014766e6039fd2e96a4fa44e2a78d0e1fa2ff49826"
+dependencies = [
+ "android_log-sys",
+ "env_filter 0.1.4",
+ "log",
+]
+
+[[package]]
 name = "android_system_properties"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1198,7 +1241,7 @@ dependencies = [
 [[package]]
 name = "collections"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "gpui_util",
  "indexmap",
@@ -1792,7 +1835,7 @@ dependencies = [
 [[package]]
 name = "derive_refineable"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2059,6 +2102,16 @@ dependencies = [
 
 [[package]]
 name = "env_filter"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1bf3c259d255ca70051b30e2e95b5446cdb8949ac4cd22c0d7fd634d89f568e2"
+dependencies = [
+ "log",
+ "regex",
+]
+
+[[package]]
+name = "env_filter"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "900d271a03799a1ee8d1ca9b19893b48ca674a9284fefcfb85f05e74ed314217"
@@ -2075,7 +2128,7 @@ checksum = "de671bd27a75a797dc9ae289ba1e77276e75e2026408aab65185384e2d5cd3f6"
 dependencies = [
  "anstream",
  "anstyle",
- "env_filter",
+ "env_filter 2.0.0",
  "jiff",
  "log",
 ]
@@ -2680,7 +2733,7 @@ dependencies = [
 [[package]]
 name = "gpui"
 version = "0.2.2"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "accesskit",
  "anyhow",
@@ -2748,9 +2801,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "gpui_android"
+version = "0.1.0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
+dependencies = [
+ "android-activity",
+ "android_logger",
+ "anyhow",
+ "futures",
+ "gpui",
+ "gpui_wgpu",
+ "jni",
+ "log",
+ "ndk",
+ "parking_lot",
+ "raw-window-handle",
+ "uuid 1.29.1",
+]
+
+[[package]]
 name = "gpui_apple"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "anyhow",
  "async-task",
@@ -2791,7 +2863,7 @@ dependencies = [
 [[package]]
 name = "gpui_linux"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "accesskit",
  "accesskit_unix",
@@ -2835,7 +2907,7 @@ dependencies = [
 [[package]]
 name = "gpui_macos"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "accesskit",
  "accesskit_macos",
@@ -2874,7 +2946,7 @@ dependencies = [
 [[package]]
 name = "gpui_macros"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -2885,10 +2957,11 @@ dependencies = [
 [[package]]
 name = "gpui_platform"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "anyhow",
  "gpui",
+ "gpui_android",
  "gpui_linux",
  "gpui_macos",
  "gpui_windows",
@@ -2897,7 +2970,7 @@ dependencies = [
 [[package]]
 name = "gpui_shared_string"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "schemars",
  "serde",
@@ -2907,7 +2980,7 @@ dependencies = [
 [[package]]
 name = "gpui_util"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "anyhow",
  "log",
@@ -2917,7 +2990,7 @@ dependencies = [
 [[package]]
 name = "gpui_wgpu"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "anyhow",
  "bytemuck",
@@ -2944,7 +3017,7 @@ dependencies = [
 [[package]]
 name = "gpui_windows"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "accesskit",
  "accesskit_windows",
@@ -3202,7 +3275,7 @@ dependencies = [
 [[package]]
 name = "http_client"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "anyhow",
  "bytes",
@@ -4630,6 +4703,7 @@ dependencies = [
  "log",
  "ndk-sys",
  "num_enum",
+ "raw-window-handle",
  "thiserror 1.0.69",
 ]
 
@@ -6429,7 +6503,7 @@ dependencies = [
 [[package]]
 name = "refineable"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "derive_refineable",
 ]
@@ -7026,7 +7100,7 @@ dependencies = [
 [[package]]
 name = "scheduler"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "async-task",
  "backtrace",
@@ -7738,7 +7812,7 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 [[package]]
 name = "sum_tree"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "heapless",
  "rayon",
@@ -10620,7 +10694,7 @@ dependencies = [
 [[package]]
 name = "ztracing"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 dependencies = [
  "tracing",
  "ztracing_macro",
@@ -10629,7 +10703,7 @@ dependencies = [
 [[package]]
 name = "ztracing_macro"
 version = "0.1.0"
-source = "git+https://github.com/sonorahq/gpui?rev=8ddac49c8b5a079149b33b4581e03f74e05237e0#8ddac49c8b5a079149b33b4581e03f74e05237e0"
+source = "git+https://github.com/perospirone/gpui?rev=abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407#abb2b4f9a4ce6fca89c24c4e4dc4a3d048ba6407"
 
 [[package]]
 name = "zune-core"
