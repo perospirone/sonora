@@ -409,37 +409,54 @@ impl TrackSource {
     fn index_cell(&self, cell: &Cell<TrackField>, track: &Track, cx: &App) -> AnyElement {
         let playing = self.now_playing(cell.row, cx);
         let playable = self.plays_now(track, cx);
-        let (preload, press) = match playable {
-            false => (None, None),
+        let preload = match playable {
+            false => None,
             true => {
                 let playback = self.playback.clone();
                 let source = self.provider.clone();
                 let at = cell.row;
-                let preload: Option<cells::Tap> = Some(Box::new(move |cx| {
+                Some(Box::new(move |cx: &mut App| {
                     let Some(track) = source.tracks(cx).get(at).cloned() else {
                         return;
                     };
                     playback.update(cx, |playback, _| playback.preload(&track));
-                }));
-                let provider = self.provider.clone();
-                let table = self.table.clone();
-                let whence = self.whence.clone();
-                let row = cell.row;
-                let display = cell.display;
-                let press = cells::toggle(&self.playback, playing, move |playback, cx| {
-                    let from = whence.as_ref().and_then(|whence| whence(cx));
-                    match table.as_ref().and_then(|table| table.upgrade()) {
-                        Some(table) => playback.start(ordered(&table, cx), display, from, cx),
-                        None => playback.start(provider.tracks(cx).to_vec(), row, from, cx),
-                    }
-                });
-                (preload, press)
+                }) as cells::Tap)
             }
+        };
+        let press = match playable {
+            true => self.press(cell, playing, track, cx),
+            false => None,
         };
 
         let number = self.number(track, cx);
 
         cells::index(cell, playing, playable, number, preload, press, cx)
+    }
+
+    /// What activating a row does: the transport cell plays or pauses, and so does the track's
+    /// name, so tapping a title plays it rather than only the small transport button.
+    fn press(
+        &self,
+        cell: &Cell<TrackField>,
+        playing: Option<bool>,
+        track: &Track,
+        cx: &App,
+    ) -> Option<cells::Tap> {
+        if !self.plays_now(track, cx) {
+            return None;
+        }
+        let provider = self.provider.clone();
+        let table = self.table.clone();
+        let whence = self.whence.clone();
+        let row = cell.row;
+        let display = cell.display;
+        cells::toggle(&self.playback, playing, move |playback, cx| {
+            let from = whence.as_ref().and_then(|whence| whence(cx));
+            match table.as_ref().and_then(|table| table.upgrade()) {
+                Some(table) => playback.start(ordered(&table, cx), display, from, cx),
+                None => playback.start(provider.tracks(cx).to_vec(), row, from, cx),
+            }
+        })
     }
 
     fn title_cell(
@@ -449,12 +466,13 @@ impl TrackSource {
         color: Option<Hsla>,
         cx: &App,
     ) -> AnyElement {
+        let playing = self.now_playing(cell.row, cx);
         cells::title(
             cell,
             track.name.clone(),
             color,
             track.explicit.then(|| t!("song-explicit")),
-            None,
+            self.press(cell, playing, track, cx),
             download_mark(cell, track, cx),
             self.liked_button(cell, track, cx),
         )
