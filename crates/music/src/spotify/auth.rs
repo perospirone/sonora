@@ -142,7 +142,7 @@ fn authorize(client_id: &str, redirect_uri: &str, prompt: PromptSink) -> Result<
         .set_pkce_challenge(challenge)
         .url();
     prompt(SignInPrompt::Url(url.to_string()));
-    open::that_in_background(url.as_str());
+    crate::shell::open(url.as_str());
 
     let address = socket_address(redirect_uri)
         .with_context(|| format!("redirect URI has no socket address: {redirect_uri}"))?;

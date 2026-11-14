@@ -68,10 +68,18 @@ tempfile.workspace = true
 tokio.workspace = true
 tokio-tungstenite.workspace = true
 widevine.workspace = true
+
+# YouTube Music talks to its client through QuickJS, which ships no bindings for Android, so the
+# provider is only built where that engine exists.
+[target.'cfg(not(target_os = "android"))'.dependencies]
 ytmusic.workspace = true
 
 [target.'cfg(unix)'.dependencies]
 libc.workspace = true
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.22"
+ndk-context = "0.1"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 alsa.workspace = true

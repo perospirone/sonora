@@ -191,7 +191,7 @@ pub(crate) async fn device(http: &reqwest::Client, prompt: &PromptSink) -> Resul
         code: device.user_code.clone(),
         url: shown.to_owned(),
     });
-    open::that_in_background(match approve.starts_with("http") {
+    crate::shell::open(match approve.starts_with("http") {
         true => approve,
         false => format!("https://{approve}"),
     });
