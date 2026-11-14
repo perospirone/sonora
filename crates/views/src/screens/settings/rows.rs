@@ -154,6 +154,12 @@ impl SettingsView {
 
     /// A row whose choice is drawn as option cards: the label on a row of its own, then the
     /// cards across the column under it.
+    #[cfg(any(
+        target_os = "windows",
+        target_os = "linux",
+        target_os = "freebsd",
+        target_os = "macos"
+    ))]
     pub(super) fn stacked(&self, title: SharedString, cards: impl IntoElement) -> AnyElement {
         div()
             .flex()

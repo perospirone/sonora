@@ -1,11 +1,38 @@
 use gpui::prelude::*;
-use gpui::{AnyElement, App, Context, SharedString, Window};
+use gpui::{AnyElement, App, Context, SharedString};
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos"
+))]
+use gpui::Window;
 use i18n::{Language, t};
 use router::{NavEntry, Screen};
-use ui::{MenuItem, OptionCard, Pace, Picker, Rounding, Saver, Stillness, Switch};
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos"
+))]
+use ui::{OptionCard, Rounding};
+use ui::{MenuItem, Pace, Picker, Saver, Stillness, Switch};
 
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos"
+))]
 use super::appearance::corner;
-use super::rows::{Announced as _, grid, segmented};
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos"
+))]
+use super::rows::{Announced as _, grid};
+use super::rows::segmented;
 use super::{Group, LANGUAGES, SettingsView, Slot};
 use crate::shared::popups::matches_query;
 
@@ -46,7 +73,12 @@ impl SettingsView {
         if !self.settings.read(cx).server_side_decorations() {
             slots.push(Slot::WindowRounding);
         }
-        #[cfg(not(any(target_os = "linux", target_os = "freebsd", target_os = "macos")))]
+        #[cfg(not(any(
+            target_os = "linux",
+            target_os = "freebsd",
+            target_os = "macos",
+            target_os = "android"
+        )))]
         let slots = vec![
             Slot::Decorations,
             Slot::Side,
@@ -55,6 +87,10 @@ impl SettingsView {
         ];
         #[cfg(target_os = "macos")]
         let slots = vec![Slot::Decorations, Slot::WindowRounding];
+        // The system draws the status bar and the gesture handle on a phone, and the window has
+        // no frame of its own, so none of these are choices the app can offer.
+        #[cfg(target_os = "android")]
+        let slots: Vec<Slot> = Vec::new();
         slots
     }
 
@@ -184,7 +220,7 @@ impl SettingsView {
         )
     }
 
-    #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
+    #[cfg(any(target_os = "windows", target_os = "macos"))]
     pub(super) fn decorations_row(&self, cx: &mut Context<Self>) -> AnyElement {
         let on = self.settings.read(cx).window_controls();
 
@@ -200,7 +236,7 @@ impl SettingsView {
         )
     }
 
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
     pub(super) fn traffic_light_controls_row(&self, cx: &mut Context<Self>) -> AnyElement {
         let on = self.settings.read(cx).traffic_light_controls();
 
@@ -259,7 +295,7 @@ impl SettingsView {
         self.stacked(t!("settings-window-rounding"), cards)
     }
 
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
     pub(super) fn side_row(&self, cx: &mut Context<Self>) -> AnyElement {
         let settings = self.settings.read(cx);
         let left = settings.controls_on_left();

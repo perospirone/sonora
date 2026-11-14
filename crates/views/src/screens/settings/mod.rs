@@ -140,11 +140,11 @@ enum Slot {
     TrayIcon,
     #[cfg(any(target_os = "linux", target_os = "freebsd"))]
     ServerSideDecorations,
-    #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
+    #[cfg(any(target_os = "windows", target_os = "macos"))]
     Decorations,
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
     Side,
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
     TrafficLights,
     #[cfg(any(
         target_os = "windows",
@@ -786,17 +786,17 @@ impl SettingsView {
                 t!("settings-server-side-decorations"),
                 t!("settings-server-side-decorations-detail"),
             ),
-            #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
+            #[cfg(any(target_os = "windows", target_os = "macos"))]
             Slot::Decorations => (
                 t!("settings-window-controls"),
                 t!("settings-window-controls-detail"),
             ),
-            #[cfg(not(target_os = "macos"))]
+            #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
             Slot::Side => (
                 t!("settings-controls-side"),
                 t!("settings-controls-side-detail"),
             ),
-            #[cfg(not(target_os = "macos"))]
+            #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
             Slot::TrafficLights => (
                 t!("settings-traffic-light-controls"),
                 t!("settings-traffic-light-controls-detail"),
@@ -966,6 +966,10 @@ impl SettingsView {
     }
 
     /// Builds the slot's row or cards when its group is visible or needs measuring.
+    #[cfg_attr(
+        target_os = "android",
+        allow(unused_variables, reason = "only the window-frame rows read the window, and Android has none")
+    )]
     fn slot_element(&self, slot: Slot, window: &Window, cx: &mut Context<Self>) -> AnyElement {
         match slot {
             Slot::Startup => self.startup_row(cx),
@@ -1001,11 +1005,11 @@ impl SettingsView {
             Slot::Saver => self.saver_row(cx),
             #[cfg(any(target_os = "linux", target_os = "freebsd"))]
             Slot::ServerSideDecorations => self.server_side_decorations_row(cx),
-            #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
+            #[cfg(any(target_os = "windows", target_os = "macos"))]
             Slot::Decorations => self.decorations_row(cx),
-            #[cfg(not(target_os = "macos"))]
+            #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
             Slot::Side => self.side_row(cx),
-            #[cfg(not(target_os = "macos"))]
+            #[cfg(any(target_os = "windows", target_os = "linux", target_os = "freebsd"))]
             Slot::TrafficLights => self.traffic_light_controls_row(cx),
             #[cfg(any(
                 target_os = "windows",
