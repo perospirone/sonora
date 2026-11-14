@@ -68,10 +68,6 @@ tempfile.workspace = true
 tokio.workspace = true
 tokio-tungstenite.workspace = true
 widevine.workspace = true
-
-# YouTube Music talks to its client through QuickJS, which ships no bindings for Android, so the
-# provider is only built where that engine exists.
-[target.'cfg(not(target_os = "android"))'.dependencies]
 ytmusic.workspace = true
 
 [target.'cfg(unix)'.dependencies]
@@ -80,6 +76,9 @@ libc.workspace = true
 [target.'cfg(target_os = "android")'.dependencies]
 jni = "0.22"
 ndk-context = "0.1"
+# QuickJS ships no prebuilt bindings for Android, so this platform generates them at build time
+# from the C headers with bindgen, which wants libclang and the NDK's target flags.
+rquickjs-sys = { version = "0.12", features = ["bindgen"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 alsa.workspace = true

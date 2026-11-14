@@ -298,7 +298,6 @@ fn providers(
     let providers: Vec<Arc<dyn music::MusicProvider>> = vec![
         Arc::new(music::spotify::SpotifyProvider::from_env()),
         Arc::new(music::apple::AppleProvider::new()),
-        #[cfg(not(target_os = "android"))]
         Arc::new(music::youtube::YouTubeProvider::new()),
         Arc::new(music::subsonic::SubsonicProvider::new()),
         Arc::new(music::deezer::DeezerProvider::new()),
@@ -316,7 +315,6 @@ fn providers(
         Arc::new(music::local::LocalLyrics),
         Arc::new(music::subsonic::SubsonicLyrics::new()),
         Arc::new(music::spotify::SpotifyLyrics::from_env()),
-        #[cfg(not(target_os = "android"))]
         Arc::new(music::youtube::YouTubeLyrics::new()),
         Arc::new(music::binimum::Binimum::new()),
         Arc::new(music::musixmatch::Musixmatch::new()),
